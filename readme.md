@@ -8,7 +8,7 @@ The API that is being made will be able to manage books, using endpoints there w
 5. **DELETE** `/api/SuperHero/{id}` - Delete a super hero 
 
 
-**Requirements **
+**Requirements**
 - Visual Studio 2019 
 - .NET 5 SDK 
 - sql express 
