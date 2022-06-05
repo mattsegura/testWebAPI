@@ -7,14 +7,9 @@ namespace SuperHero.Controllers
     [ApiController]
     public class SuperHeroController : ControllerBase
     {
-
-        // get method 
-        [HttpGet]
-        public async Task<ActionResult<List<SuperHero>>> Get() // show values within swagger
-        {
-            // return list of super heros 
-            var heroes = new List<SuperHero>
-            { 
+        // return list of super heros 
+        private static List<SuperHero> heroes = new List<SuperHero>
+            {
                 new SuperHero {
                     Id = 1,
                     Name = "Batman",
@@ -24,6 +19,20 @@ namespace SuperHero.Controllers
                 }
             };
 
+
+
+        // request data
+        [HttpGet]
+        public async Task<ActionResult<List<SuperHero>>> Get() // show values within swagger
+        {
+            return Ok(heroes); // return to make sure everything is fine 
+        }
+
+        // send data 
+        [HttpPost]
+        public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero) // show values within swagger
+        {
+            heroes.Add(hero);
             return Ok(heroes); // return to make sure everything is fine 
         }
     }
