@@ -68,7 +68,6 @@ namespace SuperHero.Controllers
             var hero = await context.SuperHeroes.FindAsync(id); // searching for the hero Id within method
             if (hero == null) // checking hero 
                 return BadRequest("Hero not found");
-            return Ok(hero); // return to make sure everything is fine 
 
             context.SuperHeroes.Remove(hero);
             await context.SaveChangesAsync();
