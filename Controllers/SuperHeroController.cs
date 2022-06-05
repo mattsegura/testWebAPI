@@ -16,19 +16,36 @@ namespace SuperHero.Controllers
                     FirstName = "Bruce",
                     LastName = "Wayne",
                     Place = "Gotham"
-                }
+                },
+                new SuperHero {
+                    Id = 2,
+                    Name = "Ironman",
+                    FirstName = "Tony",
+                    LastName = "Start",
+                    Place = "Long Island"
+                },
             };
 
 
 
-        // request data
+        // publishing data
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> Get() // show values within swagger
         {
             return Ok(heroes); // return to make sure everything is fine 
         }
 
-        // send data 
+        // retrieving a single hero 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SuperHero>> Get(int id) // show values within swagger
+        {
+            var hero = heroes.Find(h => h.Id == id); // searching for the hero Id within method
+            if (hero == null) // checking hero 
+                return BadRequest("Hero not found");
+            return Ok(hero); // return to make sure everything is fine 
+        }
+
+        // adding something new  
         [HttpPost]
         public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero) // show values within swagger
         {
