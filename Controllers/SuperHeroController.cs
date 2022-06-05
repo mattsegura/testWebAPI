@@ -7,39 +7,27 @@ namespace SuperHero.Controllers
     [ApiController]
     public class SuperHeroController : ControllerBase
     {
-        // return list of super heros 
-        private static List<SuperHero> heroes = new List<SuperHero>
-            {
-                new SuperHero {
-                    Id = 1,
-                    Name = "Batman",
-                    FirstName = "Bruce",
-                    LastName = "Wayne",
-                    Place = "Gotham"
-                },
-                new SuperHero {
-                    Id = 2,
-                    Name = "Ironman",
-                    FirstName = "Tony",
-                    LastName = "Start",
-                    Place = "Long Island"
-                },
-            };
+       
+        private readonly DataContext context;
 
+        public SuperHeroController(DataContext context)
+        {
+            this.context = context;
+        }
 
 
         // publishing data
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> Get() // show values within swagger
         {
-            return Ok(heroes); // return to make sure everything is fine 
+            return Ok(await context.SuperHeroes.ToListAsync()); // getting heroes from database
         }
 
         // retrieving a single hero 
         [HttpGet("{id}")]
         public async Task<ActionResult<SuperHero>> Get(int id) // show values within swagger
         {
-            var hero = heroes.Find(h => h.Id == id); // searching for the hero Id within method
+            var hero = await context.SuperHeroes.FindAsync(id); // searching for the hero Id within method
             if (hero == null) // checking hero 
                 return BadRequest("Hero not found");
             return Ok(hero); // return to make sure everything is fine 
@@ -49,15 +37,17 @@ namespace SuperHero.Controllers
         [HttpPost]
         public async Task<ActionResult<List<SuperHero>>> AddHero(SuperHero hero) // show values within swagger
         {
-            heroes.Add(hero);
-            return Ok(heroes); // return to make sure everything is fine 
+            context.SuperHeroes.Add(hero); // changed the table
+            await context.SaveChangesAsync(); // saving the change 
+
+            return Ok(await context.SuperHeroes.ToListAsync()); // return to make sure everything is fine 
         }
 
         [HttpPut]
 
         public async Task<ActionResult<List<SuperHero>>> UpdateHero(SuperHero request) // show values within swagger
         {
-            var hero = heroes.Find(h => h.Id == request.Id); // searching for the hero Id within method
+            var hero = await context.SuperHeroes.FindAsync(request.Id); // searching for the hero Id within method
             if (hero == null) // checking hero 
                 return BadRequest("Hero not found");
 
@@ -66,19 +56,24 @@ namespace SuperHero.Controllers
             hero.LastName = request.LastName;
             hero.Place = request.Place;
 
-            return Ok(heroes); // return to make sure everything is fine 
+            await context.SaveChangesAsync();
+
+            return Ok(await context.SuperHeroes.ToListAsync()); // return to make sure everything is fine 
         }
 
         [HttpDelete("{id}")]
 
         public async Task<ActionResult<List<SuperHero>>> Delete(int id) // show values within swagger
         {
-            var hero = heroes.Find(h => h.Id == id); // searching for the hero Id within method
+            var hero = await context.SuperHeroes.FindAsync(id); // searching for the hero Id within method
             if (hero == null) // checking hero 
                 return BadRequest("Hero not found");
+            return Ok(hero); // return to make sure everything is fine 
 
-            heroes.Remove(hero);
-            return Ok(heroes); // return to make sure everything is fine 
+            context.SuperHeroes.Remove(hero);
+            await context.SaveChangesAsync();
+
+            return Ok(await context.SuperHeroes.ToListAsync());
         }
     }
 }
