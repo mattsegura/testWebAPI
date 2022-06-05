@@ -9,6 +9,22 @@ namespace SuperHero.Controllers
     {
 
         // get method 
-        
+        [HttpGet]
+        public async Task<ActionResult<List<SuperHero>>> Get() // show values within swagger
+        {
+            // return list of super heros 
+            var heroes = new List<SuperHero>
+            { 
+                new SuperHero {
+                    Id = 1,
+                    Name = "Batman",
+                    FirstName = "Bruce",
+                    LastName = "Wayne",
+                    Place = "Gotham"
+                }
+            };
+
+            return Ok(heroes); // return to make sure everything is fine 
+        }
     }
 }
